@@ -4,7 +4,7 @@
 
 ## 技术架构
 
-![Alt Screenshot](https://github.com/tteat/wukong/raw/master/img/架构2.png)
+![Alt Screenshot](https://github.com/tteat/wukong/blob/main/img/架构2.png)
 
 ## 技术特色
 
@@ -68,4 +68,4 @@ TABLE I: The list of supported System for VM service
 |  China    |     VM    |   Aliyun    |    Yes    |   aliyun-java-sdk-ecs(4.17.8)                      | [aliyun](https://help.aliyun.com/document_detail/25484.html)        |
 |  China    |     VM    |   Tencent   |    Yes    |   tencentcloud-sdk-java(3.0.112)                   | [Tencent](https://intl.cloud.tencent.com/product/api)               |
 
-![Alt Screenshot](https://github.com/tteat/wukong/raw/master/img/api.png)
+![Alt Screenshot](https://github.com/tteat/wukong/blob/main/img/api.png)
