@@ -1,32 +1,61 @@
-# WuKong
+# 多平台异构服务适配及协作构件
 
-##  1. Backgroud
+通过反射对AWS、Azure、Google、Alibaba等公司的开发API接口及其SDK的分析，生成对应云管API的参数、调用关系和执行逻辑。进而可以分析其代码与文档质量，为服务集成提供支撑。
 
-  We plan to use an automated method for generating adapters of service-based generic-API for hybrid clouds
-  
-  - [Case studies](https://ieeexplore.ieee.org/document/8705827): Yuanjia Xu, Heng Wu, Haijun Li, Yuewen Wu, Shijun Qin, Tianze Huang:
-Wukong: Heuristic-Based Framework for Generating Generic-API for JointCloud. SOSE 2019
+## 技术架构
+
+![Alt Screenshot](https://github.com/tteat/wukong/raw/master/img/架构2.png)
+
+## 技术特色
+
+* Java反射：API分析方法利用Java反射技术，通过分析云服务示例代码抽象出三元组模型，使用基于统计分析的方式进行API的搜索和发现；
+* 动态映射：通过分析出服务的API并构造成树形结构，接着建立High-level API和Low-level API映射模型，通过动态映射的方式实现运行时服务适配
+
+## 代码架构
+wukong<br>
+├─LICENSE<br>
+├─README.md<br>
+├─pom.xml<br>
+├─src<br>
+|  ├─main<br>
+|  |  ├─java<br>
+|  |  |  ├─io<br>
+|  |  |  | ├─github<br>
+|  |  |  | |   ├─pdoslab<br>
+|  |  |  | |   |    ├─wukong<br>
+|  |  |  | |   |    |   ├─Analyzer.java<br>
+|  |  |  | |   |    |   ├─StartAnalyzer.java<br>
+|  |  |  | |   |    |   ├─utils<br>
+|  |  |  | |   |    |   |   ├─ClassUtils.java<br>
+|  |  |  | |   |    |   |   ├─JSONUtils.java<br>
+|  |  |  | |   |    |   |   ├─JavaUtils.java<br>
+|  |  |  | |   |    |   |   ├─KubeUtils.java<br>
+|  |  |  | |   |    |   |   └StringUtils.java<br>
+|  |  |  | |   |    |   ├─model<br>
+|  |  |  | |   |    |   |   └JDKInfo.java<br>
+|  |  |  | |   |    |   ├─core<br>
+|  |  |  | |   |    |   |  ├─Heuristicv1.java<br>
+|  |  |  | |   |    |   |  └Heuristicv2.java<br>
+|  |  |  | |   |    |   ├─analyzer<br>
+|  |  |  | |   |    |   |    ├─RequestWithObjectPatternAnalyzer.java<br>
+|  |  |  | |   |    |   |    └RequestWithParameterPatternAnalyzer.java<br>
+├─results<br>
+├─conf<br>
 
 
-##  2. Usage
-
-### 2.1 command
-
+## 部署方式    
 ```
+git clone https://github.com/tteat/wukong.git
 java -jar wukong-1.0.0-SNAPSHOT-jar-with-dependencies.jar jdkinfo.conf
 ```
+the jar can be get from https://github.com/pdos-lab/Wukong/releases/download/v1.0.0/wukong-1.0.0-SNAPSHOT-jar-with-dependencies.jar
 
-- the jar can be get from   https://github.com/pdos-lab/Wukong/releases/download/v1.0.0/wukong-1.0.0-SNAPSHOT-jar-with-dependencies.jar
-- the file can be get from  https://github.com/pdos-lab/Wukong/tree/master/conf
+## 使用说明   
 
-then you can see the output
-
-### 2.2 Http proxy
-
-##  3. Analysis
-
-We describe the [operations](docs/Operations.md).suppoted by the system mentioned below.
-Then, we give the parameters of each system in detail.
+* Wukong/pom.xml ： 配置要分析的SDK包的依赖
+* Wukong/conf ： 配置云服务的配置信息（仿照目录下的文件）
+* Wukong/src/main/java/io/github/pdoslab/wukong/Classifier.java ： 修改对应的config，运行文件，得到分析结果
+* Wukong/src/main/java/io/github/pdoslab/wukong/Main.java ： 修改27行、32行配置，运行文件的出结果
 
 
 TABLE I: The list of supported System for VM service
@@ -39,16 +68,4 @@ TABLE I: The list of supported System for VM service
 |  China    |     VM    |   Aliyun    |    Yes    |   aliyun-java-sdk-ecs(4.17.8)                      | [aliyun](https://help.aliyun.com/document_detail/25484.html)        |
 |  China    |     VM    |   Tencent   |    Yes    |   tencentcloud-sdk-java(3.0.112)                   | [Tencent](https://intl.cloud.tencent.com/product/api)               |
 
-
-**Node that the value of "No" in column "Support" just means the related APIs
-of target system does not satisfy our assumptions, we should reengineer the APIs**
-
-Deprecated
-
-|  Country  |   Type    |   Name    |  Offical  |  Version  |      Document       |
-| :-------: | :-------: | :-------: | :-------: | :-------: |      :-------:      |
-|  USA      |     VM    |   OpenStack |    No     |   openstack4j(3.2.0）                                                      | [OpenStack](https://docs.openstack.org/api-quick-start/)            |
-|  China    |     VM    |   Baidu     |    Yes    |   bce-java-sdk(0.10.87)                            | [baidu](https://cloud.baidu.com/doc/BCC/API.html)                   |
-|  China    |     VM    |   JD        |    Yes    |   vm(1.2.5)                                        | [JD](https://docs.jdcloud.com/cn/virtual-machines/product-overview) |
-|  China    |     VM    |   Qingcloud |    Yes    |   qingcloud-sdk-java(1.1.0)                        | [QingCloud](https://www.qingcloud.com/products/instances/)          |
-
+![Alt Screenshot](https://github.com/tteat/wukong/raw/master/img/api.png)
